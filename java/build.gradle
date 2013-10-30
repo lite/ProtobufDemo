@@ -1,0 +1,57 @@
+sourceCompatibility = 1.6
+version = 1.0
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+}
+    
+subprojects {
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile (
+            'io.netty:netty:3.5.0.Final',
+    		'com.google.guava:guava:r09',
+            'log4j:log4j:1.2.16',
+            'com.google.protobuf:protobuf-java:2.5.0'
+    	)
+        testCompile(
+            'junit:junit:4.7',
+            'org.mockito:mockito-all:1.9.0',
+        )
+    }
+}
+
+
+project(':proto') {
+}
+
+project(':server') {
+    jar {
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+        manifest { attributes 'Main-Class': 'net.demo.server.DemoServer' }
+    }
+
+    dependencies { 
+        compile(
+            project(':proto')
+        )
+    }
+}
+
+project(':client') {
+    jar {
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+        manifest { attributes 'Main-Class': 'net.demo.client.DemoClient' }
+    }
+
+    dependencies { 
+        compile(
+            project(':proto')
+        )
+    }
+}

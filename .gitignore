@@ -1,0 +1,7 @@
+*.pyc
+*.class
+java/log/
+java/out/
+java/*/build/
+java/build/
+java/.gradle/
